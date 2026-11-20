@@ -1,59 +1,60 @@
-<div align="center">
-  <!-- Animated Wave Header -->
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:08110f,50:153e2e,100:53dfa8&height=210&section=header&text=CampuSync&fontSize=56&fontColor=ffffff&fontAlignY=38&desc=By%20Vortex%20Group%20%E2%80%A2%20Dubai,%20UAE&descSize=16&descAlignY=58&animation=fadeIn" width="100%" alt="CampuSync Banner" />
+# CampuSync
 
-  <!-- Animated Typing Tagline -->
-  <a href="https://github.com/astrax-gif">
-    <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=18&duration=2800&pause=1000&color=53DFA8&center=true&vCenter=true&multiline=false&width=680&lines=Real-Time+Campus+Room+Visibility.+Deployed+in+Minutes.;Interactive+Floor+Plans+%26+Live+Schedule+Sync.;Multi-Tenant+University+Portals+(%3Cuni%3E.campusync.net);Built+in+Dubai+for+Modern+Campuses+Worldwide." alt="Typing SVG" />
-  </a>
+CampuSync is the university onboarding, campus preview, and payment demo for Vortex Group. It includes a React/Vite website, a FastAPI API, SQLite for local development, and PostgreSQL for Compose deployments.
 
-  <br /><br />
+## Run locally
 
-  <!-- Tech Stack & Status Badges -->
-  <p>
-    <img src="https://img.shields.io/badge/Vortex_Group-Flagship_Product-53dfa8?style=for-the-badge&labelColor=08110f" alt="Vortex Group" />
-    <img src="https://img.shields.io/badge/React_18-TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white&labelColor=08110f" alt="React TypeScript" />
-    <img src="https://img.shields.io/badge/Vite-Bundler-646CFF?style=for-the-badge&logo=vite&logoColor=white&labelColor=08110f" alt="Vite" />
-    <img src="https://img.shields.io/badge/Supabase-PostgreSQL_%26_Realtime-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white&labelColor=08110f" alt="Supabase" />
-    <img src="https://img.shields.io/badge/Vercel-Multi--Tenant_Edge-000000?style=for-the-badge&logo=vercel&logoColor=white&labelColor=08110f" alt="Vercel" />
-  </p>
-</div>
+Requirements: Python 3.11+, Node.js 20+, and npm.
 
----
+1. Copy `.env.example` to `.env` and set `ADMIN_PIN` to a private value.
+2. Start the API:
 
-## Overview
+   ```powershell
+   cd backend
+   python -m venv .venv
+   .\.venv\Scripts\Activate.ps1
+   pip install -r requirements.txt
+   uvicorn app.main:app --reload --port 8000 --env-file ..\\.env
+   ```
 
-**CampuSync** transforms static university timetables and scattered room spreadsheets into a **live spatial operating layer** for students, faculty, and facilities teams.
+3. In a second terminal, start the website:
 
-Starting with **University of Europe for Applied Sciences (UE Dubai)** and built to scale across campuses globally, CampuSync combines a **self-serve university onboarding & checkout hub** (`campusyncer.com`) with **isolated, real-time tenant portals** (`<university>.campusyncer.com`).
+   ```powershell
+   cd frontend
+   npm install
+   npm run dev
+   ```
 
----
+Open `http://localhost:5173`. The API uses `http://localhost:8000` and creates `backend/campusync.db` automatically.
 
-## Core Capabilities
+## Run with Docker Compose
 
-| Module | What It Does |
-| :--- | :--- |
-| **Live Spatial Floor Plans** | Real-time room status (`Available`, `In session`, `Booked`), seat capacity, and next-slot countdowns across wings and floors. |
-| **Multi-Tenant Subdomain Engine** | Automatic tenant resolution from custom subdomains (`uedubai.campusyncer.com`, `mdx.campusyncer.com`), Vercel aliases, or query routes. |
-| **4-Step Self-Serve Onboarding** | Live subdomain slug availability checker, campus scale estimator, AED/USD pricing toggle, and instant tenant provisioning. |
-| **Dual Institutional Billing** | Supports both **Instant Card Activation** (Stripe Checkout) and **Pro-Forma Invoice / PO Requests** with a 14-day sandbox preview. |
-| **Vortex Group Command Center** | Internal admin dashboard to review incoming university applications, approve PO/invoice requests, and toggle live room statuses. |
+From the repository root:
 
----
+```powershell
+docker compose up --build
+```
 
-## Architecture
+The website is at `http://localhost:5173`, the API at `http://localhost:8000`, and PostgreSQL at port `5432`. Compose uses the PostgreSQL settings in `docker-compose.yml`.
 
-```text
-campuSync/
-├── public/
-│   └── campusync-logo.svg        # Brand vector mark
-├── src/
-│   ├── lib/
-│   │   └── supabase.ts           # Supabase PostgreSQL client + multi-tenant subdomain resolver
-│   ├── App.tsx                   # Main hub, interactive preview, onboarding wizard, tenant portal & admin
-│   ├── index.css                 # Dark/Light theme system & responsive glassmorphic styling
-│   └── main.tsx                  # Application entry point
-├── supabase/
-│   └── schema.sql                # PostgreSQL tables, RLS policies, and UE Dubai seed data
-├── vercel.json                   # SPA & wildcard subdomain rewrite rules
-└── .env.example                  # Required environment variables
+## Demo flow
+
+- Use the onboarding wizard to reserve a campus slug and select a plan.
+- With no `STRIPE_SECRET_KEY`, card checkout uses Demo Sandbox Mode and returns to a confirmation screen that activates the tenant.
+- To accept real payments, configure `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET`; point a Stripe webhook at `POST /api/payments/webhook` and subscribe to `checkout.session.completed`.
+- Invoice / PO requests immediately provision a 14-day sandbox and create a printable pro-forma invoice.
+- Visit `/admin` and enter `ADMIN_PIN` to review requests and approve invoice tenants. The default PIN is intended only for local demos; change it before deployment.
+
+## API
+
+- `GET /api/health`
+- `GET /api/tenants/check-slug/{slug}`
+- `POST /api/onboarding/submit`
+- `POST /api/payments/create-checkout-session`
+- `POST /api/payments/demo-confirm/{request_id}`
+- `GET /api/payments/checkout-status/{session_id}`
+- `POST /api/payments/webhook`
+- `GET /api/admin/requests` (`X-Admin-Pin` header)
+- `POST /api/admin/requests/{request_id}/activate` (`X-Admin-Pin` header)
+
+Interactive API documentation is available at `http://localhost:8000/docs`.
