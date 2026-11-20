@@ -25,7 +25,7 @@
 
 **CampuSync** transforms static university timetables and scattered room spreadsheets into a **live spatial operating layer** for students, faculty, and facilities teams.
 
-Starting with **University of Europe for Applied Sciences (UE Dubai)** and built to scale across campuses globally, CampuSync combines a **self-serve university onboarding & checkout hub** (`campusync.net`) with **isolated, real-time tenant portals** (`<university>.campusync.net`).
+Starting with **University of Europe for Applied Sciences (UE Dubai)** and built to scale across campuses globally, CampuSync combines a **self-serve university onboarding & checkout hub** (`campusyncer.com`) with **isolated, real-time tenant portals** (`<university>.campusyncer.com`).
 
 ---
 
