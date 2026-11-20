@@ -15,7 +15,6 @@ export function BrandWordmark({ className = "" }: BrandWordmarkProps) {
     <span className={`campusyncer-wordmark ${className}`} role="img" aria-label="CampuSyncer">
       <img className="campusyncer-logo-on-dark" src="/assets/campusyncer-wordmark-dark.png" alt="" />
       <img className="campusyncer-logo-on-light" src="/assets/campusyncer-wordmark.png" alt="" />
-      <span className="campusyncer-wordmark-suffix" aria-hidden="true">er</span>
     </span>
   );
 }
