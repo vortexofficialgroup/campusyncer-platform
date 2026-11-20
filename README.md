@@ -34,7 +34,7 @@ Starting with **University of Europe for Applied Sciences (UE Dubai)** and built
 | Module | What It Does |
 | :--- | :--- |
 | **Live Spatial Floor Plans** | Real-time room status (`Available`, `In session`, `Booked`), seat capacity, and next-slot countdowns across wings and floors. |
-| **Multi-Tenant Subdomain Engine** | Automatic tenant resolution from custom subdomains (`uedubai.campusync.net`, `mdx.campusync.net`), Vercel aliases, or query routes. |
+| **Multi-Tenant Subdomain Engine** | Automatic tenant resolution from custom subdomains (`uedubai.campusyncer.com`, `mdx.campusyncer.com`), Vercel aliases, or query routes. |
 | **4-Step Self-Serve Onboarding** | Live subdomain slug availability checker, campus scale estimator, AED/USD pricing toggle, and instant tenant provisioning. |
 | **Dual Institutional Billing** | Supports both **Instant Card Activation** (Stripe Checkout) and **Pro-Forma Invoice / PO Requests** with a 14-day sandbox preview. |
 | **Vortex Group Command Center** | Internal admin dashboard to review incoming university applications, approve PO/invoice requests, and toggle live room statuses. |
