@@ -1,6 +1,6 @@
-# CampuSync
+# CampuSyncer
 
-CampuSync is the university onboarding, campus preview, and payment demo for Vortex Group. It includes a React/Vite website, a FastAPI API, SQLite for local development, and PostgreSQL for Compose deployments.
+CampuSyncer is the university onboarding, campus preview, and payment demo for Vortex Group. It includes a React/Vite website, a FastAPI API, SQLite for local development, and PostgreSQL for Compose deployments.
 
 ## Run locally
 
@@ -26,6 +26,7 @@ Requirements: Python 3.11+, Node.js 20+, and npm.
    ```
 
 Open `http://localhost:5173`. The API uses `http://localhost:8000` and creates `backend/campusync.db` automatically.
+In local Vite development, `/api` requests are proxied to `http://localhost:8000`.
 
 ## Run with Docker Compose
 
@@ -58,3 +59,15 @@ The website is at `http://localhost:5173`, the API at `http://localhost:8000`, a
 - `POST /api/admin/requests/{request_id}/activate` (`X-Admin-Pin` header)
 
 Interactive API documentation is available at `http://localhost:8000/docs`.
+
+## Deploy with Vercel Services
+
+Import the repository as one Vercel project with the repository root as the project root. Vercel builds the `backend` and `frontend` services independently using the root `vercel.json`.
+
+- `/api/*` is routed to the FastAPI backend; the frontend receives all other paths.
+- Leave `VITE_API_URL` unset in Vercel so browser requests use the same-origin `/api` rewrite. It is only set by Docker Compose for local containers.
+- Configure `DATABASE_URL` to a persistent PostgreSQL database; Vercel's local filesystem is not a persistent SQLite database. Also set `ADMIN_PIN` and, for live payments, `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET`.
+- Set `FRONTEND_URL=https://campusyncer.com` (or your chosen public frontend origin) in Vercel so payment returns land on the frontend. If omitted on Vercel, the API uses `VERCEL_URL`; locally it falls back to `http://localhost:5173`.
+- Point the Stripe webhook at `https://<your-domain>/api/payments/webhook`.
+
+There are no internal service bindings: frontend requests run in the visitor's browser and use the public same-origin `/api` route; the backend does not call the frontend service.

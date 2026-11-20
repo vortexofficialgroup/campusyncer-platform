@@ -42,7 +42,7 @@ def check_slug(slug: str, db: Session = Depends(get_db)):
         "slug": normalized,
         "available": available,
         "valid": valid,
-        "url": f"{normalized}.campusync.net",
+        "url": f"{normalized}.campusyncer.com",
         "message": message,
     }
 

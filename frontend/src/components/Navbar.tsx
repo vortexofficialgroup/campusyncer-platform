@@ -1,5 +1,6 @@
 import { Menu, Moon, Sun, X } from "lucide-react";
 import { useState } from "react";
+import BrandLockup from "./BrandLockup";
 
 interface NavbarProps {
   onLaunch: () => void;
@@ -14,10 +15,7 @@ export default function Navbar({ onLaunch, theme, onToggleTheme }: NavbarProps) 
   return (
     <header className="site-header">
       <nav className="nav-shell container">
-        <a className="brand" href="#" aria-label="CampuSync home" onClick={closeMenu}>
-          <span className="brand-mark">C<span>.</span></span>
-          <span className="brand-copy"><strong>campusync</strong><small>by Vortex Group</small></span>
-        </a>
+        <BrandLockup href="#" onClick={closeMenu} />
         <button className="mobile-menu-button icon-button" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close menu" : "Open menu"}>
           {menuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>

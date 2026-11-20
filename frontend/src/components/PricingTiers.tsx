@@ -65,7 +65,7 @@ export default function PricingTiers({ onSelectPlan }: PricingTiersProps) {
             </article>
           ))}
         </div>
-        <p className="pricing-note">Need a tailored plan? <a href="mailto:hello@campusync.net">Let&apos;s talk about your campus <ArrowRight size={13} /></a></p>
+        <p className="pricing-note">Need a tailored plan? <a href="mailto:hello@campusyncer.com">Let&apos;s talk about your campus <ArrowRight size={13} /></a></p>
       </div>
     </section>
   );

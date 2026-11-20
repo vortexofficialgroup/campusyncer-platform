@@ -1,6 +1,7 @@
 import { ArrowRight, BadgeCheck, CircleAlert, LoaderCircle, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { confirmDemoPayment, getCheckoutStatus, type ProvisioningResult, type Tenant } from "../lib/api";
+import BrandLockup from "../components/BrandLockup";
 import TenantPortalModal from "../components/TenantPortalModal";
 
 export default function CheckoutSuccess() {
@@ -62,14 +63,14 @@ export default function CheckoutSuccess() {
 
   return (
     <main className="checkout-page">
-      <a className="brand checkout-brand" href="/"><span className="brand-mark">C<span>.</span></span><span className="brand-copy"><strong>campusync</strong><small>by Vortex Group</small></span></a>
+      <BrandLockup href="/" className="checkout-brand" />
       <section className="checkout-card">
         {loading ? <span className="checkout-icon"><LoaderCircle className="spin" size={27} /></span> : error ? <span className="checkout-icon checkout-error"><CircleAlert size={27} /></span> : tenant ? <span className="checkout-icon checkout-success"><BadgeCheck size={29} /></span> : <span className="checkout-icon"><ShieldCheck size={27} /></span>}
         <span className="eyebrow">{tenant ? "CAMPUS PROVISIONED" : error ? "ACTION NEEDED" : "SECURE CHECKOUT"}</span>
         <h1>{tenant ? "You’re in sync." : error ? "We couldn’t verify that yet." : "Finalizing your campus."}</h1>
         <p>{error || message}</p>
-        {tenant && <div className="checkout-tenant"><strong>{tenant.university_name}</strong><span>https://{tenant.slug}.campusync.net</span><small><ShieldCheck size={14} /> Setup token: <code>{tenant.admin_setup_token}</code></small></div>}
-        {tenant ? <div className="checkout-actions"><button className="button button-primary" onClick={() => setShowPortal(true)}>Preview your campus <ArrowRight size={16} /></button><a href="/" className="button button-quiet">Back to CampuSync</a></div> : <div className="checkout-actions"><button className="button button-primary" disabled={loading} onClick={() => void checkPayment()}>{loading ? <LoaderCircle className="spin" size={15} /> : <ShieldCheck size={15} />} {error ? "Try again" : "Check payment status"}</button><a href="/" className="button button-quiet">Return to CampuSync</a></div>}
+        {tenant && <div className="checkout-tenant"><strong>{tenant.university_name}</strong><span>https://{tenant.slug}.campusyncer.com</span><small><ShieldCheck size={14} /> Setup token: <code>{tenant.admin_setup_token}</code></small></div>}
+        {tenant ? <div className="checkout-actions"><button className="button button-primary" onClick={() => setShowPortal(true)}>Preview your campus <ArrowRight size={16} /></button><a href="/" className="button button-quiet">Back to CampuSyncer</a></div> : <div className="checkout-actions"><button className="button button-primary" disabled={loading} onClick={() => void checkPayment()}>{loading ? <LoaderCircle className="spin" size={15} /> : <ShieldCheck size={15} />} {error ? "Try again" : "Check payment status"}</button><a href="/" className="button button-quiet">Return to CampuSyncer</a></div>}
       </section>
       {tenant && <TenantPortalModal tenant={showPortal ? tenant : null} onClose={() => setShowPortal(false)} />}
     </main>

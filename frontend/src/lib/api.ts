@@ -1,4 +1,4 @@
-const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:8000").replace(/\/$/, "");
+const API_URL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 
 export type Plan = "pilot" | "full" | "enterprise";
 export type Currency = "AED" | "USD";
@@ -70,7 +70,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       headers: { "Content-Type": "application/json", ...init?.headers },
     });
   } catch {
-    throw new Error("Could not reach the CampuSync API. Make sure the backend is running.");
+    throw new Error("Could not reach the CampuSyncer API. Make sure the backend is running.");
   }
   if (!response.ok) {
     const data = (await response.json().catch(() => null)) as { detail?: string } | null;

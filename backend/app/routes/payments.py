@@ -13,8 +13,17 @@ from ..schemas import CheckoutCreate, CheckoutResult
 
 router = APIRouter(prefix="/payments", tags=["payments"])
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY", "")
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173").rstrip("/")
 PLAN_AMOUNTS_AED = {"pilot": 150000, "full": 450000, "enterprise": 1200000}
+
+
+def _frontend_url() -> str:
+    configured_url = os.getenv("FRONTEND_URL")
+    if configured_url:
+        return configured_url.rstrip("/")
+    deployment_url = os.getenv("VERCEL_URL")
+    if deployment_url:
+        return f"https://{deployment_url.removeprefix('https://').rstrip('/')}"
+    return "http://localhost:5173"
 
 
 def _activate(request_row: OnboardingRequest, db: Session) -> None:
@@ -37,7 +46,7 @@ def create_checkout_session(payload: CheckoutCreate, db: Session = Depends(get_d
 
     if not stripe.api_key:
         params = urlencode({"request_id": request_row.id, "demo": "1"})
-        return CheckoutResult(checkout_url=f"{FRONTEND_URL}/checkout-success?{params}", mode="demo")
+        return CheckoutResult(checkout_url=f"{_frontend_url()}/checkout-success?{params}", mode="demo")
 
     amount = PLAN_AMOUNTS_AED.get(request_row.tenant.plan)
     if request_row.tenant.currency == "USD":
@@ -53,13 +62,13 @@ def create_checkout_session(payload: CheckoutCreate, db: Session = Depends(get_d
                     "currency": request_row.tenant.currency.lower(),
                     "unit_amount": amount,
                     "recurring": {"interval": "month"},
-                    "product_data": {"name": f"CampuSync {request_row.tenant.plan.title()} Campus Plan"},
+                    "product_data": {"name": f"CampuSyncer {request_row.tenant.plan.title()} Campus Plan"},
                 },
                 "quantity": 1,
             }],
             metadata={"request_id": request_row.id},
-            success_url=f"{FRONTEND_URL}/checkout-success?session_id={{CHECKOUT_SESSION_ID}}&request_id={request_row.id}",
-            cancel_url=f"{FRONTEND_URL}/?checkout=cancelled",
+            success_url=f"{_frontend_url()}/checkout-success?session_id={{CHECKOUT_SESSION_ID}}&request_id={request_row.id}",
+            cancel_url=f"{_frontend_url()}/?checkout=cancelled",
         )
     except stripe.StripeError as exc:
         raise HTTPException(status_code=502, detail="Stripe could not create a checkout session.") from exc

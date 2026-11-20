@@ -1,5 +1,6 @@
 import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronRight, CirclePlay, Command, Layers3, Zap } from "lucide-react";
 import InteractivePreview from "../components/InteractivePreview";
+import BrandLockup from "../components/BrandLockup";
 import Navbar from "../components/Navbar";
 import PricingTiers from "../components/PricingTiers";
 import type { Plan } from "../lib/api";
@@ -57,9 +58,9 @@ export default function LandingPage({ onLaunch, theme, onToggleTheme }: LandingP
           </div>
         </section>
         <PricingTiers onSelectPlan={(plan) => onLaunch(plan)} />
-        <section className="closing-cta"><div className="container closing-inner"><div><span className="eyebrow">YOUR CAMPUS, IN SYNC</span><h2>Make room for what&apos;s next.</h2><p>Bring your campus operations into focus with CampuSync.</p></div><button className="button button-primary button-large" onClick={() => onLaunch()}>Deploy your campus <ArrowRight size={17} /></button></div></section>
+        <section className="closing-cta"><div className="container closing-inner"><div><span className="eyebrow">YOUR CAMPUS, IN SYNC</span><h2>Make room for what&apos;s next.</h2><p>Bring your campus operations into focus with CampuSyncer.</p></div><button className="button button-primary button-large" onClick={() => onLaunch()}>Deploy your campus <ArrowRight size={17} /></button></div></section>
       </main>
-      <footer className="site-footer"><div className="container footer-inner"><a className="brand" href="#"><span className="brand-mark">C<span>.</span></span><span className="brand-copy"><strong>campusync</strong><small>by Vortex Group</small></span></a><span>Campus operations, in sync.</span><div><a href="#pricing">Pricing</a><a href="mailto:hello@campusync.net">Contact</a><a href="/admin">Admin</a></div><small>© {new Date().getFullYear()} Vortex Group. Dubai, UAE.</small></div></footer>
+      <footer className="site-footer"><div className="container footer-inner"><BrandLockup href="#" /><span>Campus operations, in sync.</span><div><a href="#pricing">Pricing</a><a href="mailto:hello@campusyncer.com">Contact</a><a href="/admin">Admin</a></div><small>© {new Date().getFullYear()} Vortex Group. Dubai, UAE.</small></div></footer>
     </>
   );
 }

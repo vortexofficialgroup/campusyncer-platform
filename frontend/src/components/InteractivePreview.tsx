@@ -29,7 +29,7 @@ export default function InteractivePreview() {
             <h2>A campus that <span className="text-gradient">answers in real time.</span></h2>
             <p>Explore the UE Dubai Innovation Wing. Every room status, capacity and next slot—one clear view.</p>
           </div>
-          <span className="campus-domain"><span className="domain-pulse" /> uedubai.campusync.net</span>
+          <span className="campus-domain"><span className="domain-pulse" /> uedubai.campusyncer.com</span>
         </div>
         <div className="preview-window">
           <div className="preview-topbar">

@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowRight, BadgeCheck, Building2, Check, CreditCard, FileText, LoaderCircle, LockKeyhole, Plus, ShieldCheck, X } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 import { checkSlug, createCheckout, submitOnboarding, type Currency, type OnboardingPayload, type OnboardingResult, type Plan, type Tenant } from "../lib/api";
+import { BrandWordmark } from "./BrandLockup";
 
 interface OnboardingWizardProps {
   open: boolean;
@@ -128,7 +129,7 @@ export default function OnboardingWizard({ open, onClose, initialPlan, onTenantR
       <section className="wizard-modal" role="dialog" aria-modal="true" aria-labelledby="wizard-title">
         <button className="icon-button modal-close" onClick={close} aria-label="Close onboarding"><X size={19} /></button>
         <div className="wizard-header">
-          <div className="wizard-brand"><span className="brand-mark">C<span>.</span></span><span>Campus deployment</span></div>
+          <div className="wizard-brand"><BrandWordmark /><span>Campus deployment</span></div>
           <span className="wizard-counter">STEP {step.toString().padStart(2, "0")} <i>/ 04</i></span>
         </div>
         <div className="wizard-progress">{steps.map((label, index) => <div key={label} className={`wizard-progress-step ${step >= index + 1 ? "progress-done" : ""}`}><span>{step > index + 1 ? <Check size={12} /> : index + 1}</span><small>{label}</small></div>)}</div>
@@ -140,7 +141,7 @@ export default function OnboardingWizard({ open, onClose, initialPlan, onTenantR
             <label className="field-label">Your role<select value={form.role} onChange={(event) => update("role", event.target.value)}><option>IT Director</option><option>Facilities</option><option>Dean</option><option>Administrator</option><option>Other</option></select></label>
           </div>
           <label className="field-label">Official university email<input required type="email" value={form.email} onChange={(event) => update("email", event.target.value)} placeholder="name@university.ac.ae" /><small>We recommend using your .ac.ae or .edu address.</small></label>
-          <label className="field-label">Choose your campus subdomain<div className="slug-input-wrap"><input required minLength={2} value={form.slug} onChange={(event) => update("slug", event.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))} placeholder="your-campus" /><span>.campusync.net</span></div>{slugState && <small className={slugState.available ? "field-success" : "field-error"}>{slugState.available ? <Check size={13} /> : <X size={13} />}{slugState.message}{slugState.available ? " — your URL is ready" : ""}</small>}</label>
+          <label className="field-label">Choose your campus subdomain<div className="slug-input-wrap"><input required minLength={2} value={form.slug} onChange={(event) => update("slug", event.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))} placeholder="your-campus" /><span>.campusyncer.com</span></div>{slugState && <small className={slugState.available ? "field-success" : "field-error"}>{slugState.available ? <Check size={13} /> : <X size={13} />}{slugState.message}{slugState.available ? " — your URL is ready" : ""}</small>}</label>
           <div className="wizard-actions"><span className="secure-note"><LockKeyhole size={13} /> Secure institution setup</span><button className="button button-primary" type="submit">Continue <ArrowRight size={16} /></button></div>
         </form>}
         {step === 2 && <div>
@@ -164,7 +165,7 @@ export default function OnboardingWizard({ open, onClose, initialPlan, onTenantR
           <span className="eyebrow">{paymentMethod === "invoice" ? "SANDBOX READY" : "CAMPUS PROVISIONED"}</span>
           <h2 id="wizard-title">{paymentMethod === "invoice" ? "Your campus preview is live." : "Your campus is in sync."}</h2>
           <p>Your private campus workspace has been set up. Share this secure setup token with your university admin.</p>
-          <div className="provision-card"><div className="provision-card-heading"><span className="mini-mark">C</span><div><strong>{tenant.university_name}</strong><small>{tenant.slug}.campusync.net</small></div>          <span className={`status-pill ${tenant.status === "ACTIVE" ? "status-active" : "status-sandbox"}`}>{tenant.status.replace(/_/g, " ")}</span></div><div className="provision-details"><span><Building2 size={15} /> {tenant.estimated_buildings} {tenant.estimated_buildings === 1 ? "building" : "buildings"}</span><span><Plus size={15} /> {tenant.estimated_rooms} rooms</span><span><ShieldCheck size={15} /> {planLabels[tenant.plan]}</span></div><div className="token-display"><small>ADMIN SETUP TOKEN</small><code>{tenant.admin_setup_token}</code></div></div>
+          <div className="provision-card"><div className="provision-card-heading"><span className="mini-mark">C</span><div><strong>{tenant.university_name}</strong><small>{tenant.slug}.campusyncer.com</small></div>          <span className={`status-pill ${tenant.status === "ACTIVE" ? "status-active" : "status-sandbox"}`}>{tenant.status.replace(/_/g, " ")}</span></div><div className="provision-details"><span><Building2 size={15} /> {tenant.estimated_buildings} {tenant.estimated_buildings === 1 ? "building" : "buildings"}</span><span><Plus size={15} /> {tenant.estimated_rooms} rooms</span><span><ShieldCheck size={15} /> {planLabels[tenant.plan]}</span></div><div className="token-display"><small>ADMIN SETUP TOKEN</small><code>{tenant.admin_setup_token}</code></div></div>
           {paymentMethod === "invoice" && <div className="invoice-print"><div className="invoice-head"><span>CAMPUSYNC <small>BY VORTEX GROUP</small></span><strong>PRO-FORMA INVOICE</strong></div><p><b>Reference:</b> {result.invoice_reference}<br /><b>Prepared for:</b> {tenant.university_name}<br /><b>Contact:</b> {form.contact_name} · {form.email}<br /><b>Plan:</b> {planLabels[form.plan]}<br /><b>Monthly subscription:</b> {form.currency} {form.plan === "pilot" ? "1,500" : form.plan === "full" ? "4,500" : "12,000+"}</p><small>Sandbox preview provisioned for 14 days. Final invoice subject to institutional procurement approval.</small></div>}
           <div className="wizard-actions provision-actions"><button className="button button-outline" onClick={() => window.print()}><FileText size={15} /> {paymentMethod === "invoice" ? "Print / save invoice" : "Save setup details"}</button><button className="button button-primary" onClick={() => { onTenantReady?.(tenant); onClose(); }}>Open tenant preview <ArrowRight size={16} /></button></div>
         </div>}

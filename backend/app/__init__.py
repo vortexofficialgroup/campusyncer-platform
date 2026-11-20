@@ -1,1 +1,1 @@
-"""CampuSync API application package."""
+"""CampuSyncer API application package."""

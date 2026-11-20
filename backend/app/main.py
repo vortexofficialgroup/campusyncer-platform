@@ -9,7 +9,7 @@ from .routes import admin, onboarding, payments
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="CampuSync API", version="1.0.0")
+app = FastAPI(title="CampuSyncer API", version="1.0.0")
 frontend_origin = os.getenv("FRONTEND_URL", "http://localhost:5173").rstrip("/")
 configured_origins = [
     origin.strip()
