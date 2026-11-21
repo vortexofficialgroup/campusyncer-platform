@@ -60,7 +60,7 @@ class CheckoutCreate(BaseModel):
 
 class CheckoutResult(BaseModel):
     checkout_url: str
-    mode: Literal["stripe", "demo"]
+    mode: Literal['stripe', 'demo', 'whop', 'enterprise']
 
 
 class TenantView(BaseModel):
